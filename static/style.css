@@ -1,3 +1,9 @@
+body{
+    background-image: url("https://mdbcdn.b-cdn.net/img/new/slides/003.webp");
+    background-repeat: no-repeat;
+    background-size: auto 950px;
+    background-color: black;
+}
 * {
     margin-top: 0;
     padding: 0;
@@ -6,17 +12,23 @@
 
 .container {
     padding: 30px 0;
-    background: url("https://mdbootstrap.com/img/new/fluid/city/018.jpg");
     background-position: center;
     background-size:cover;
 }
 
 h1 {
-    color: #fafafa;
+    color:black;
     text-align: center;
-    font-size: 36px;
-    font-weight: 700;
+    font-size: 40px;
+    font-weight: 900;
     margin-bottom: 20px;
+}
+h6{
+color:black;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 700;
+    margin: 20px;
 }
 
 form {
@@ -24,7 +36,7 @@ form {
     margin: 0 auto;
     padding: 30px 20px 20px;
     border-radius: 5px;
-    background: rgba(226, 224, 224, 0.9);
+    background: rgba(255, 255, 255, 0.8);
 }
 
 .user-email-group {
