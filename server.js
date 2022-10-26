@@ -19,21 +19,17 @@ app.use("/", express.static(path.join(__dirname, "static")));
 app.use(bodyParser.json());
 
 app.post("/api/login", async (req, res) => {
-  const { username,email,phone, password } = req.body;
-  const user = await User.findOne({ username }).lean();
-  const emailverify = await User.findOne({ email }).lean();
-  const phoneverify = await User.findOne({ phone }).lean();
-  if (!user || !emailverify || !phoneverify) {
-    return res.json({ status: "error", error: "Invalid Username/password/email" }); 
+  const { username, password } = req.body;
+  const user = await User.findOne({username}).lean();
+  if (!user) {
+    return res.json({ status: "error", error: "Invalid Username/password/email" });
   }
+  const token = jwt.sign({ id: user._id, username: user.username }, JWT_SECRET);
   if (await bcrypt.compare(password, user.password)) {
-    const token = jwt.sign(
-      { id: user._id, username: user.username,email:emailverify.email,phone:phoneverify.phone },
-      JWT_SECRET
-    );
     return res.json({ status: "ok", data:token });
+  }else{
+    return res.json({ status: "ok", data:"" });
   }
-  res.json({ status: "ok" });
 });
 
 app.post("/api/index", async (req, res) => {
