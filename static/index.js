@@ -2,12 +2,11 @@ console.log("hey");
 const username = document.getElementById("username");
 const email = document.getElementById("email");
 const phone = document.getElementById("phone");
-const passord = document.getElementById("password");
 let validUser = false;
 let validPhone = false;
 let validEmail = false;
-$("#success").hide();
-$("#failure").hide();
+$('#success').hide();
+$('#failure').hide();
 // console.log(name,email,phone);
 username.addEventListener("blur", () => {
   console.log("name is blurred");
@@ -58,46 +57,45 @@ phone.addEventListener("blur", () => {
   }
 });
 
-//Login
+//Register
 const submit = document.getElementById("submit");
-submit.addEventListener("click", login);
-async function login(event) {
-  event.preventDefault();
-  const username = document.getElementById("username").value;
-  const email = document.getElementById("email").value;
-  const phone = document.getElementById("phone").value;
-  const password = document.getElementById("password").value;
-  const result = await fetch("/api/login", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      username,
-      email,
-      phone,
-      password,
-    }),
-  }).then((res) => res.json());
-
-  console.log("You clicked on submit");
+  submit.addEventListener("click", registerUser);
+  async function registerUser(event) {
+    event.preventDefault();
+    console.log("You clicked on submit");
   console.log(validUser, validEmail, validPhone);
-  if (validEmail && validUser && validPhone && result.status === "ok") {
-    console.log("Phone,email,username are valid");
-    console.log("Got the token: ", result.data);
-    let failure = document.getElementById("failure");
-    let success = document.getElementById("success");
-    success.classList.add("show");
-    // failure.classList.remove("show");
-    $("#failure").hide();
-    $("#success").show();
-  } else {
-    console.log("one of Phone,email,username is invalid");
-    let failure = document.getElementById("failure");
-    let success = document.getElementById("success");
-    failure.classList.add("show");
-    // success.classList.remove("show");
-    $("#success").hide();
-    $("#failure").show();
-  }
-};
+    const username = document.getElementById("username").value;
+    const email = document.getElementById("email").value;
+    const phone = document.getElementById("phone").value;
+    const password = document.getElementById("password").value;
+    const result = await fetch("/api/index", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username,
+        email,
+        phone,
+        password,
+      }),
+    }).then((res) => res.json());
+    console.log(result);
+    if (validEmail && validUser && validPhone && result.status === "ok") {
+      console.log("Phone,email,username are valid");
+      let failure = document.getElementById("failure");
+      let success = document.getElementById("success");
+      success.classList.add("show");
+      // failure.classList.remove("show");
+      $("#failure").hide();
+      $("#success").show();
+    } else {
+      console.log("one of Phone,email,username is invalid");
+      let failure = document.getElementById("failure");
+      let success = document.getElementById("success");
+      failure.classList.add("show");
+      // success.classList.remove("show");
+      $("#success").hide();
+      $("#failure").show();
+    }
+  };

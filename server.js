@@ -19,14 +19,16 @@ app.use("/", express.static(path.join(__dirname, "static")));
 app.use(bodyParser.json());
 
 app.post("/api/login", async (req, res) => {
-  const { username, password } = req.body;
+  const { username,email,phone, password } = req.body;
   const user = await User.findOne({ username }).lean();
-  if (!user) {
-    return res.json({ status: "error", error: "Invalid Username/password" });
+  const emailverify = await User.findOne({ email }).lean();
+  const phoneverify = await User.findOne({ phone }).lean();
+  if (!user || !emailverify || !phoneverify) {
+    return res.json({ status: "error", error: "Invalid Username/password/email" }); 
   }
   if (await bcrypt.compare(password, user.password)) {
     const token = jwt.sign(
-      { id: user._id, username: user.username },
+      { id: user._id, username: user.username,email:emailverify.email,phone:phoneverify.phone },
       JWT_SECRET
     );
     return res.json({ status: "ok", data:token });
@@ -34,8 +36,8 @@ app.post("/api/login", async (req, res) => {
   res.json({ status: "ok" });
 });
 
-app.post("/api/register", async (req, res) => {
-  const { username, password: plainTextPassword } = req.body;
+app.post("/api/index", async (req, res) => {
+  const { username,email,phone, password: plainTextPassword } = req.body;
   const password = await bcrypt.hash(plainTextPassword, 1);
 
   if (!username || typeof username !== "string") {
@@ -54,6 +56,8 @@ app.post("/api/register", async (req, res) => {
   try {
     const response = await User.create({
       username,
+      email,
+      phone,
       password,
     });
     console.log("User created successfully", response);
